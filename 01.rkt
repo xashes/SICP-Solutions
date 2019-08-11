@@ -33,7 +33,7 @@
   (define guess 1.0)
   (sqrt-iter n guess))
 
-(check-equal? (round (sqrt-nt 9)) 3.0)
+(check-= (sqrt-nt 9) 3.0 0.1)
 
 
 ;; exercise 1.8 牛顿法求立方根
