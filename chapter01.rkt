@@ -108,3 +108,62 @@
   (check-equal? (yh-triangle 4 1) 1)
   (check-equal? (yh-triangle 4 3) 3)
   )
+
+;; 1.2.4 expt
+;; recursive version
+(define/contract (expt-rec b n)
+  (-> real? nonnegative-integer? real?)
+  (if (zero? n)
+      1
+      (* b (expt-rec b (sub1 n))))
+  )
+(module+ test
+  (for ([b (in-range -1 1 0.5)]
+        [n (in-range 4)])
+    (check-equal? (expt-rec b n)
+                  (expt b n)))
+  )
+
+;; iterate version
+(define/contract (expt-iter b n)
+  (-> real? nonnegative-integer? real?)
+  (let iter ([counter n]
+             [product 1])
+    (if (zero? counter)
+        product
+        (iter (sub1 counter) (* product b))))
+  )
+(module+ test
+  (for ([b (in-range -1 1 0.5)]
+        [n (in-range 4)])
+    (check-equal? (expt-iter b n)
+                  (expt b n)))
+  )
+
+;; for/fold version
+(define/contract (expt-for b n)
+  (-> real? nonnegative-integer? real?)
+  (for/fold ([product 1])
+            ([i (in-range n)])
+    (* b product)))
+(module+ test
+  (for ([b (in-range -1 1 0.5)]
+        [n (in-range 4)])
+    (check-equal? (expt-for b n)
+                  (expt b n)))
+  )
+
+;; fast recursive version
+(define/contract (fast-expt-rec b n)
+  (-> real? nonnegative-integer? real?)
+  (cond
+    [(zero? n) 1]
+    [(even? n) (sqr (fast-expt-rec b (/ n 2)))]
+    [(odd? n) (* b (fast-expt-rec b (sub1 n)))])
+  )
+(module+ test
+  (for ([b (in-range -1 1 0.5)]
+        [n (in-range 4)])
+    (check-equal? (fast-expt-rec b n)
+                  (expt b n)))
+  )
