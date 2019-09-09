@@ -54,6 +54,24 @@
                          (sub1 i)))))
   )
 
+;; iterate version using for/fold
+(define/contract (f1.11-iter2 n)
+  (-> integer? integer?)
+  (if (< n 3)
+      n
+      (for/fold ([fn-3 0]
+                 [fn-2 1]
+                 [fn-1 2]
+                 #:result fn-1)
+                ([i (in-range (- n 2))])
+        (values
+         fn-2
+         fn-1
+         (+ fn-1
+            (* 2 fn-2)
+            (* 3 fn-3)))))
+  )
+
 (module+ test
   (define (plot-f1.11)
     (plot (list (lines (for/list ([i (in-range -3 10)])
@@ -68,4 +86,25 @@
                        #:style 'short-dash))))
   (for ([i (in-range -3 6)])
     (check-equal? (f1.11 i) (f1.11-iter i)))
+  (for ([i (in-range -3 6)])
+    (check-equal? (f1.11-iter i) (f1.11-iter2 i)))
+  )
+
+
+;; exercise 1.12
+;; yang hui triangle
+(define/contract (yh-triangle row col)
+  (-> positive-integer? positive-integer? positive-integer?)
+  (if (or (= col 1)
+          (= row col))
+      1
+      (+ (yh-triangle (sub1 row) (sub1 col))
+         (yh-triangle (sub1 row) col)))
+  )
+(module+ test
+  (check-equal? (yh-triangle 1 1) 1)
+  (check-equal? (yh-triangle 3 3) 1)
+  (check-equal? (yh-triangle 3 2) 2)
+  (check-equal? (yh-triangle 4 1) 1)
+  (check-equal? (yh-triangle 4 3) 3)
   )
