@@ -35,7 +35,7 @@
          (* 3 (f1.11 (- n 3)))))
   )
 
-;; iterate version
+;; ierative version
 (define/contract (f1.11-iter n)
   (-> integer? integer?)
   (if (< n 3)
@@ -54,7 +54,7 @@
                          (sub1 i)))))
   )
 
-;; iterate version using for/fold
+;; ierative version using for/fold
 (define/contract (f1.11-iter2 n)
   (-> integer? integer?)
   (if (< n 3)
@@ -124,7 +124,7 @@
                   (expt b n)))
   )
 
-;; iterate version
+;; ierative version
 (define/contract (expt-iter b n)
   (-> real? nonnegative-integer? real?)
   (let iter ([counter n]
@@ -165,5 +165,17 @@
   (for ([b (in-range -1 1 0.5)]
         [n (in-range 4)])
     (check-equal? (fast-expt-rec b n)
+                  (expt b n)))
+  )
+
+;; fast iterative version
+(define/contract (fast-expt-iter b n)
+  (-> real? nonnegative-integer? real?)
+  1
+  )
+(module+ test
+  (for ([b (make-list 8 2)]
+        [n (in-range 8)])
+    (check-equal? (fast-expt-iter b n)
                   (expt b n)))
   )
