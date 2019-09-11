@@ -171,7 +171,13 @@
 ;; fast iterative version
 (define/contract (fast-expt-iter b n)
   (-> real? nonnegative-integer? real?)
-  1
+  (let iter ([base b]
+             [counter n]
+             [result 1])
+    (cond
+      [(zero? counter) result]
+      [(even? counter) (iter (sqr base) (/ counter 2) result)]
+      [(odd? counter) (iter base (sub1 counter) (* result base))]))
   )
 (module+ test
   (for ([b (make-list 8 2)]
